@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+      <meta charset="UTF-8">
+
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai-sublime.min.css">
+
+      <title>Responsive Nav + Page Transitions</title>
+
+      <style>
+
+        * {
+          box-sizing: border-box;
+        }
+
+        body {
+          margin: 0;
+          font-family: sans-serif;
+          overflow-x: hidden;
+          background-color: #999;
+        }
+
+        nav {
+          position: fixed;
+          top: 0;
+          width: 100%;
+          background: #222;
+          color: white;
+          padding: 10px 20px; 
+          height: 52px;
+          justify-content: space-between;
+          align-items: center;
+          z-index: 100;
+          box-sizing: border-box;
+          min-height: 52px; 
+          overflow: hidden;
+        }
+
+        .nav-inner {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: nowrap; 
+        }
+
+        .nav-links {
+          display: none;
+        }
+
+        .nav-links a {
+          color: white;
+          text-decoration: none;
+          cursor: pointer;
+          white-space: nowrap;
+        }
+
+        #logo {
+          text-decoration: none;
+          transition: transform 0.2s ease;
+          max-height: 32px;
+        }
+
+        #logo:hover {
+          transform: scale(1.5);
+        }
+
+        #logo-repository {
+          max-height: 32px;
+        }
+
+        .burger {
+          display: flex;
+          flex-direction: column;
+          gap: 3px;
+          cursor: pointer;
+          padding: 10px;
+          z-index: 200;
+          max-height: 32px;
+        }
+
+        .burger div {
+          width: 25px;
+          height: 3px;
+          background: white;
+        }
+
+        .mobile-menu {
+          display: none; 
+          flex-direction: column;
+          background: #222;
+          padding: 20px;
+          overflow: hidden;
+          text-align: right;
+          position: fixed; 
+          top: 52px; 
+          right: 0px; 
+          width: auto; 
+          border-top: 1px solid #444;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+          z-index: 100; 
+          opacity: 0; 
+          pointer-events: none; 
+          visibility: hidden; 
+          border-radius: 0 0 0 32px;
+        }
+
+        .mobile-menu.show {
+          display: flex; 
+          opacity: 1; 
+          pointer-events: auto; 
+          visibility: visible; 
+        }
+
+        .mobile-menu a {
+          color: white;
+          padding: 15px 0;
+          padding-right: 5px;
+          text-decoration: none;
+          cursor: pointer;
+        }
+
+        #page-container {
+          position: relative;
+          top: 52px;
+          width: 100%;
+          height: 100vh;
+        }
+
+        .page {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          max-height: 0;
+          overflow: hidden;
+          opacity: 0;
+          transition: max-height 2s ease, opacity 0.5s ease;
+          z-index: 1;
+          background: #777;
+          padding: 20px;
+        }
+
+        .page.active {
+          max-height: 5000px;
+          opacity: 1;
+          z-index: 2;
+          overflow-y: auto;
+        }
+
+        .content {
+          min-height: 1500px;
+        }
+
+        pre {
+          padding: 20px;
+          border-radius: 5px;
+          overflow-x: auto;
+        }
+        
+        code {
+          font-family: monospace;
+          font-size: 14px;
+        }
+
+        .octicon path {
+          animation: rainbow 8s linear infinite;
+        }
+        @keyframes rainbow {
+          0% {
+            fill: red;
+          }
+          14% {
+            fill: orange;
+          }
+          28% {
+            fill: yellow;
+          }
+          42% {
+            fill: green;
+          }
+          57% {
+            fill: blue;
+          }
+          71% {
+            fill: indigo;
+          }
+          85% {
+            fill: violet;
+          }
+          100% {
+            fill: red;
+          }
+        }
+
+      </style>
+
+    </head>
+
+    <body>
+
+        <nav>
+
+            <div class="nav-inner">
+
+              <a href="#" id="logo" onclick="changePage('Logo');"><img src="https://avatars.githubusercontent.com/u/20764341?v=4" alt="Logo" style="width: 32px; height: 32px;"></a>
+
+              <div class="burger" id="burgerBtn" onclick="toggleMobileMenu()"><div></div><div></div><div></div></div>
+
+            </div>
+
+            <div class="mobile-menu" id="mobileMenu">
+
+              <a id="Link-Home" onclick="changePage('Home'); toggleMobileMenu()">Home</a>
+
+              <a id="Link-Importance" onclick="changePage('Importance'); toggleMobileMenu()">Why Portfolios Matter</a>
+
+              <a id="Link-Includes" onclick="changePage('Includes'); toggleMobileMenu()">Programming Portfolio Includes</a>
+
+              <a id="Link-Design" onclick="changePage('Design'); toggleMobileMenu()">Design tips for your Development</a>
+
+              <a id="Link-Showcase" onclick="changePage('Showcase'); toggleMobileMenu()">Showcasing complete Projects</a>
+
+              <a id="Link-Services" onclick="changePage('Services'); toggleMobileMenu()">Tools & Platforms</a>
+
+              <a id="Link-Reference" onclick="changePage('Reference'); toggleMobileMenu()">Reference</a>
+
+            </div>
+
+        </nav>
+
+        <div id="page-container">
+
+            <div id="Home" class="page active"><div class="content">🏠 Home Page Content
+
+                <h1> </h1>
+
+            </div></div>
+
+            <div id="Importance" class="page"><div class="content">📖 About Page Content
+
+                <h2>Why Every Programming Student Needs a Portfolio</h2>
+                <h2>Stand Out with a Personal Programming Portfolio</h2>
+                <h2>Your Code, Your Brand</h2>
+                <p>In today’s competitive tech landscape, a resume isn’t enough. Employers, recruiters, and even classmates want to see what you can do. That’s where a programming portfolio comes in—it’s your personal space to showcase skills, projects, and creativity. Whether you're aiming for internships, freelance work, or your first dev job, a portfolio is your digital handshake.</p>
+                <ul>
+                    <li>Showcases real-world coding experience</li>
+                    <li>Gives recruiters something tangible to evaluate</li>
+                    <li>Builds your online presence</li>
+                    <li>Demonstrates initiative and self-motivation</li>
+                </ul>
+                <img src="#" alt="Portfolio Example" style="width: 100%; max-width: 600px; border-radius: 8px; margin-top: 20px;">
+                <p>Video(?)</p>
+
+            </div></div>
+
+            <div id="Includes" class="page"><div class="content">✉️ Contact Page Content
+
+                <h2>What Belongs in a Developer Portfolio?</h2>
+                <h2>Essential Portfolio Components</h2>
+                <h2>Build It Right: Key Portfolio Sections</h2>
+                <p>A good portfolio tells your story—not just what you’ve learned, but how you’ve applied it. Let’s break down the core elements every programming student should consider when crafting their portfolio.</p>
+                <ul>
+                    <li>About Me – A short bio with your programming journey</li>
+                    <li>Projects – Highlight 3–5 key projects with descriptions and links.</li>
+                    <li>Skills – Programming languages, tools, and frameworks.</li>
+                    <li>Resume – Embedded PDF or downloadable link.</li>
+                    <li>Contact Info – Email, LinkedIn, GitHub, etc.</li>
+                </ul>
+                <img src="#" alt="Portfolio Example" style="width: 100%; max-width: 600px; border-radius: 8px; margin-top: 20px;">
+                <p>Video(?)</p>
+
+            </div></div>
+
+            <div id="Design" class="page"><div class="content">🖼️ Portfolio Page Content
+
+                <h2>How to Build Your Portfolio: Tools & Platforms</h2>
+                <h2>No Designer? No Problem.</h2>
+                <h2>From Zero to Live: Building a Portfolio Website</h2>
+                <p>You don’t need to be a professional web designer to build a slick, functional portfolio. Plenty of tools exist that make publishing a site easy—even with just basic HTML/CSS knowledge. Here's a breakdown of options to help you get started.</p>
+                <ul>
+                    <li>GitHub Pages</li>
+                    <li>Netlify + HTML/CSS template</li>
+                    <li>Carrd or Notion (non-traditional but useful)</li>
+                </ul>
+                <ul>
+                    <li>React (with Vite, Next.js, etc.)</li>
+                    <li>Static site generators like Jekyll or Hugo</li>
+                </ul>
+                <ul>
+                    <li>Version control with Git</li>
+                    <li>Hosting with Netlify or GitHub Pages</li>
+                    <li>Using VS Code + terminal</li>
+                </ul>
+                <img src="#" alt="Portfolio Example" style="width: 100%; max-width: 600px; border-radius: 8px; margin-top: 20px;">
+                <p>Video(?)</p>
+
+            </div></div>
+
+            <div id="Showcase" class="page"><div class="content">🛠️ Showcase Page Content
+
+                <h2>Designing a Portfolio That Doesn’t Look Like a Coding Assignment</h2>
+                <h2>Clean, Simple, Effective: Portfolio Design for Programmers</h2>
+                <h2>Don’t Be a Designer—Be a Smart Designer</h2>
+                <p>As programmers, it’s easy to focus entirely on the code. But design matters, too. A clean, responsive, and easy-to-navigate portfolio can keep someone exploring instead of clicking away. Here are some design tips that work even if design isn’t your strong suit.</p>
+                <ul>Keep It Simple:
+                    <li>Use whitespace to reduce visual clutter</li>
+                    <li>Stick to 2–3 fonts and colors max</li>
+                </ul>
+                <ul>Make It Responsive:
+                    <li>Use Flexbox or CSS Grid</li>
+                    <li>Test on mobile and tablet views</li>
+                </ul>
+                <ul>Focus on Usability:
+                    <li>Easy-to-find navigation</li>
+                    <li>Clear project sections with calls to action</li>
+                </ul>
+                <img src="#" alt="Portfolio Example" style="width: 100%; max-width: 600px; border-radius: 8px; margin-top: 20px;">
+                <p>Video(?)</p>
+
+            </div></div>
+
+            <div id="Services" class="page"><div class="content">🛠️ Services Page Content
+
+                <h2>How to Showcase Your Projects Like a Pro</h2>
+                <h2>Turn Class Projects Into Portfolio Gold</h2>
+                <h2>Tell the Story Behind Your Code</h2>
+                <p>Your projects are the heart of your portfolio. But just listing them isn't enough—you need to tell a story. What was the goal? What challenges did you face? What did you learn? Here’s how to make every project count.</p>
+                <ul>
+                    <li>Title + short description</li>
+                    <li>Tech stack used</li>
+                    <li>Key features</li>
+                    <li>GitHub link / live demo / screenshots</li>
+                </ul>
+                <ul>
+                    <li>Write like you're explaining it to a non-developer</li>
+                    <li>Mention any collaboration or teamwork</li>
+                    <li>Highlight problem-solving moments</li>
+                    <li>How did you save time/money with a decision?</li>
+                </ul>
+                <img src="#" alt="Portfolio Example" style="width: 100%; max-width: 600px; border-radius: 8px; margin-top: 20px;">
+                <p>Video(?)</p>
+
+            </div></div>
+
+            <div id="Reference" class="page"><div class="content">📚 Reference Page Content
+
+            </div></div>
+
+            <div id="Logo" class="page"><div class="content">
+
+                <a href="#" id="logo-repository">
+
+                    <svg height="32" aria-hidden="true" viewBox="0 0 24 24" version="1.1" width="32" data-view-component="true" class="octicon octicon-mark-github v-align-middle"><path d="M12 1C5.9225 1 1 5.9225 1 12C1 16.8675 4.14875 20.9787 8.52125 22.4362C9.07125 22.5325 9.2775 22.2025 9.2775 21.9137C9.2775 21.6525 9.26375 20.7862 9.26375 19.865C6.5 20.3737 5.785 19.1912 5.565 18.5725C5.44125 18.2562 4.905 17.28 4.4375 17.0187C4.0525 16.8125 3.5025 16.3037 4.42375 16.29C5.29 16.2762 5.90875 17.0875 6.115 17.4175C7.105 19.0812 8.68625 18.6137 9.31875 18.325C9.415 17.61 9.70375 17.1287 10.02 16.8537C7.5725 16.5787 5.015 15.63 5.015 11.4225C5.015 10.2262 5.44125 9.23625 6.1425 8.46625C6.0325 8.19125 5.6475 7.06375 6.2525 5.55125C6.2525 5.55125 7.17375 5.2625 9.2775 6.67875C10.1575 6.43125 11.0925 6.3075 12.0275 6.3075C12.9625 6.3075 13.8975 6.43125 14.7775 6.67875C16.8813 5.24875 17.8025 5.55125 17.8025 5.55125C18.4075 7.06375 18.0225 8.19125 17.9125 8.46625C18.6138 9.23625 19.04 10.2125 19.04 11.4225C19.04 15.6437 16.4688 16.5787 14.0213 16.8537C14.42 17.1975 14.7638 17.8575 14.7638 18.8887C14.7638 20.36 14.75 21.5425 14.75 21.9137C14.75 22.2025 14.9563 22.5462 15.5063 22.4362C19.8513 20.9787 23 16.8537 23 12C23 5.9225 18.0775 1 12 1Z" /></svg><span>Github Repository</span></a>
+
+                <h4>Display Website Code Inside a Div</h4>
+
+                <pre id="code-block"></pre>
+
+            </div></div>
+
+        </div>
+
+        <script>
+
+            let currentPage = document.querySelector('.page.active');
+
+            function changePage(targetId) {
+              if (!targetId || (currentPage && currentPage.id === targetId)) return;
+
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+
+              const nextPage = document.getElementById(targetId);
+              currentPage.classList.remove('active');
+
+              setTimeout(() => {
+                nextPage.classList.add('active');
+                currentPage = nextPage;
+              }, 700);
+            }
+
+            function toggleMobileMenu() {
+              const menu = document.getElementById('mobileMenu');
+              menu.classList.toggle('show');
+            }
+
+            function isMobileDevice() {
+              return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth <= 768;
+            }
+
+            window.onload = () => {
+              console.log("Device:", isMobileDevice() ? "Mobile" : "Desktop");
+            };
+
+        </script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+        <script>
+            async function loadHTMLSource() {
+                try {
+                  const response = await fetch('index.html');
+                  const htmlText = await response.text();
+                
+                  const codeEl = document.getElementById('code-block');
+                  codeEl.textContent = htmlText;
+                  hljs.highlightElement(codeEl);
+                } catch (err) {
+                  document.getElementById('code-block').textContent = '⚠️ Failed to load HTML source.';
+                  console.error(err);
+                }
+            }
+        
+            window.onload = loadHTMLSource;
+
+        </script>
+
+    </body>
+
+</html>
